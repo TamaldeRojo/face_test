@@ -22,10 +22,16 @@ def videoSquats():
                 success, frame = cap.read()
                 if not success:
                     break
+                
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame.flags.writeable = False
+                
                 frame = cv2.flip(frame,1)
                 h,w,_ = frame.shape
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 results = pose.process(frame_rgb)
+
+                frame.flags.writeable = True 
+                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
                 if results.pose_landmarks is not None:
 

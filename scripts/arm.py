@@ -3,7 +3,7 @@ import cv2,mediapipe as mp,numpy as np, math
 mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("arm.mp4")
 count = 0
 stage = None
 
@@ -42,12 +42,22 @@ def armVideo(cap):
             try:
 
                 landmarks = results.pose_landmarks.landmark
-                Wrist = [landmarks[15].x,landmarks[15].y]
-                Elbow = [landmarks[13].x,landmarks[13].y]
-                Shoulder = [landmarks[11].x,landmarks[11].y]
+                Wrist = [int(landmarks[15].x*1280),
+                        int(landmarks[15].y*720)]
+                
+                Elbow = [int(landmarks[13].x*1280),
+                        int(landmarks[13].y*720)]
+                
+                Shoulder = [int(landmarks[11].x*1280),
+                            int(landmarks[11].y*720)]
      
+                image = np.zeros((720, 1280, 3), dtype=np.uint8)
+                frame = cv2.circle(image, (Wrist[0],Wrist[1]), 1, (102,255,105), 10)
+                frame = cv2.circle(image, (Elbow[0],Elbow[1]), 1, (102,255,105), 10)
+                frame = cv2.circle(image, (Shoulder[0],Shoulder[1]), 1, (102,255,105), 10)
+
                 angle = calculateAngle(Wrist,Elbow,Shoulder)
-                #print(int(angle))
+                
                
                 if angle >= 150:
                     stage = "down"
@@ -57,6 +67,9 @@ def armVideo(cap):
                     stage ="up"
                     count += 1
                     print(str(count),"--------------------------------------")
+                    
+                    if count == 10:
+                        return count
 
             except:
                 print(" No te ves we ")
@@ -70,6 +83,8 @@ def armVideo(cap):
 
 
             cv2.imshow("frame", frame) 
+            
+            
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -80,3 +95,4 @@ def releaseCam():
 
 if __name__ == "__main__":
     armVideo(cap)
+    #releaseCam()
