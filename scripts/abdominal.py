@@ -19,7 +19,7 @@ def calculateAngle(a,b,c):
         angle = 360-angle
     return  angle
 
-def abdominal(cap):
+def abdominal(cap,w,h):
     global count,stage
     with mp_pose.Pose(min_detection_confidence=0.5,min_tracking_confidence=0.5) as Pose:
         while cap.isOpened():
@@ -46,7 +46,7 @@ def abdominal(cap):
                                
                 landmarks = results.pose_landmarks.landmark
                 
-                Nose = [int(landmarks[0].x *1280),int(landmarks[0].y *720)]
+                Nose = [int(landmarks[0].x *w),int(landmarks[0].y *h)]
                 
                 Wrists = [[landmarks[15].x,landmarks[15].y],
                           [landmarks[16].x,landmarks[16].y]]
@@ -62,18 +62,18 @@ def abdominal(cap):
                 
                 #math 
                 midHip = [
-                    int(((landmarks[23].x + landmarks[24].x)/2) * 1280),
-                    int(((landmarks[23].y + landmarks[24].y)/2) * 720 )
+                    int(((landmarks[23].x + landmarks[24].x)/2) * w),
+                    int(((landmarks[23].y + landmarks[24].y)/2) * h )
                         ]
                 #print(midHip)
                 
                 midKnees = [
-                    int(((landmarks[26].x + landmarks[25].x)/2) * 1280),
-                    int(((landmarks[26].y + landmarks[25].y)/2) * 720 )
+                    int(((landmarks[26].x + landmarks[25].x)/2) * w),
+                    int(((landmarks[26].y + landmarks[25].y)/2) * h )
                         ]
                 
                 
-                image = np.zeros((720, 1280, 3), dtype=np.uint8)
+                image = np.zeros((h, w, 3), dtype=np.uint8)
                 frame = cv2.circle(image, (midHip[0],midHip[1]), 1, (102,255,105), 10)
                 frame = cv2.circle(image, (midKnees[0],midKnees[1]), 1, (102,255,105), 10)
                 frame = cv2.circle(image, (Nose[0],Nose[1]), 1, (102,255,105), 10)
@@ -103,4 +103,4 @@ def abdominal(cap):
                 break
 
 if __name__ == "__main__":
-    abdominal(cap)
+    abdominal(cap,1280,720)

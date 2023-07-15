@@ -19,7 +19,7 @@ def calculateAngle(a,b,c):
         angle = 360-angle
     return  angle
 
-def armVideo(cap):
+def armVideo(cap,w,h):
     global count,stage
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as Pose:
         
@@ -42,16 +42,16 @@ def armVideo(cap):
             try:
 
                 landmarks = results.pose_landmarks.landmark
-                Wrist = [int(landmarks[15].x*1280),
-                        int(landmarks[15].y*720)]
+                Wrist = [int(landmarks[15].x*w),
+                        int(landmarks[15].y*h)]
                 
-                Elbow = [int(landmarks[13].x*1280),
-                        int(landmarks[13].y*720)]
+                Elbow = [int(landmarks[13].x*w),
+                        int(landmarks[13].y*h)]
                 
-                Shoulder = [int(landmarks[11].x*1280),
-                            int(landmarks[11].y*720)]
+                Shoulder = [int(landmarks[11].x*w),
+                            int(landmarks[11].y*h)]
      
-                image = np.zeros((720, 1280, 3), dtype=np.uint8)
+                image = np.zeros((h, w, 3), dtype=np.uint8)
                 frame = cv2.circle(image, (Wrist[0],Wrist[1]), 1, (102,255,105), 10)
                 frame = cv2.circle(image, (Elbow[0],Elbow[1]), 1, (102,255,105), 10)
                 frame = cv2.circle(image, (Shoulder[0],Shoulder[1]), 1, (102,255,105), 10)
@@ -94,5 +94,5 @@ def releaseCam():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    armVideo(cap)
+    armVideo(cap,1280,720)
     #releaseCam()

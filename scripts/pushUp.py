@@ -9,7 +9,7 @@ mp_drawing = mp.solutions.drawing_utils
 stage = None
 count = 0
 
-def pushUp(cap):
+def pushUp(cap,w,h):
     global stage,count
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as Pose:
         while cap.isOpened():
@@ -29,18 +29,18 @@ def pushUp(cap):
             try:
                 landmarks = results.pose_landmarks.landmark
                 
-                Nose = [int(landmarks[0].x*1280),int(landmarks[0].y*720)]
+                Nose = [int(landmarks[0].x*w),int(landmarks[0].y*h)]
                 
                 midShoulder = [
-                    int(((landmarks[11].x + landmarks[12].x)/2) * 1280),
-                    int(((landmarks[11].y + landmarks[12].y)/2) * 720 )
+                    int(((landmarks[11].x + landmarks[12].x)/2) * w),
+                    int(((landmarks[11].y + landmarks[12].y)/2) * h )
                         ]
                 midWrists = [
-                    int(((landmarks[15].x + landmarks[16].x)/2) * 1280),
-                    int(((landmarks[15].y + landmarks[16].y)/2) * 720 )
+                    int(((landmarks[15].x + landmarks[16].x)/2) * w),
+                    int(((landmarks[15].y + landmarks[16].y)/2) * h )
                         ]
                 #print("a")
-                image = np.zeros((720,1280,3),dtype=np.uint8)
+                image = np.zeros((h,w,3),dtype=np.uint8)
                 frame = cv2.circle(image,(midShoulder[0],midShoulder[1]),1,(102,255,105),10)
                 frame = cv2.circle(image,(midWrists[0],midWrists[1]),1,(102,255,105),10)
                 frame = cv2.circle(image,(Nose[0],Nose[1]),1,(102,255,105),10)
@@ -71,4 +71,4 @@ def pushUp(cap):
                 break
 
 if __name__ == '__main__':
-    pushUp(cap)
+    pushUp(cap,1280,720)

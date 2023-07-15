@@ -23,7 +23,7 @@ def calculateAngle(a,b,c):
         angle = 360-angle
     return  angle
 
-def videoSquats(cap):
+def videoSquats(cap,w,h):
         global count
         global down
         global up
@@ -47,18 +47,18 @@ def videoSquats(cap):
 
                 try:
                     landmarks = results.pose_landmarks.landmark
-                    hip = [int(landmarks[23].x*1280),
-                           int(landmarks[23].y*720)]
+                    hip = [int(landmarks[23].x*w),
+                           int(landmarks[23].y*h)]
                     
-                    knee = [int(landmarks[25].x*1280),
-                           int(landmarks[25].y*720)]
+                    knee = [int(landmarks[25].x*w),
+                           int(landmarks[25].y*h)]
                     
-                    ankle = [int(landmarks[27].x*1280),
-                           int(landmarks[27].y*720)]
+                    ankle = [int(landmarks[27].x*w),
+                           int(landmarks[27].y*h)]
 
                     angle = calculateAngle(hip,knee,ankle)
 
-                    image = np.zeros((720, 1280, 3), dtype=np.uint8)
+                    image = np.zeros((h, w, 3), dtype=np.uint8)
                     frame = cv2.circle(image, (hip[0],hip[1]), 1, (102,255,105), 10)
                     frame = cv2.circle(image, (knee[0],knee[1]), 1, (102,255,105), 10)
                     frame = cv2.circle(image, (ankle[0],ankle[1]), 1, (102,255,105), 10)
@@ -97,5 +97,5 @@ def release_camera():
         cv2.destroyAllWindows()      
 
 if __name__ == "__main__":
-    videoSquats(cap)
+    videoSquats(cap,1280,720)
     release_camera()

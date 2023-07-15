@@ -11,7 +11,7 @@ count = 0
 
 cap=cv2.VideoCapture("squats.mp4")
 
-def videoSquats():
+def videoSquats(cap,w,h):
         global count
         global down
         global up

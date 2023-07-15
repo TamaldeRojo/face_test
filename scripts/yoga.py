@@ -3,13 +3,28 @@ import cv2
 from math import cos,degrees
 import numpy as np
 
-cap = cv2.VideoCapture("yoga.mp4")
-cap.set(3,1280)
-cap.set(4,720)
+cap = cv2.VideoCapture("legs.mp4")
+
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
+stage = None
+count = 0
+def calculateAngle(a,b,c):
+    a = np.array(a)
+    b = np.array(b)
+    c = np.array(c)
 
-def yoga(cap):
+    randians = np.arctan2(c[1]-b[1],c[0]-b[0]) - np.arctan2(a[1]-b[1],a[0]-b[0])
+    angle = np.abs(randians*180.0/np.pi)
+
+    if angle>180.0:
+        angle = 360-angle
+    return  angle
+
+def yoga(cap,w,h):
+    global stage,count
+    cap.set(3,w)
+    cap.set(4,h)
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             success,frame = cap.read()
@@ -26,7 +41,40 @@ def yoga(cap):
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             
             try:
-                frame = np.zeros((720, 1280, 3), dtype=np.uint8)
+                landmarks = results.pose_landmarks.landmark
+                
+                Hips = [
+                        (int(landmarks[23].x*w),
+                         int(landmarks[23].y*h)),
+                        
+                        (int(landmarks[24].x*w),
+                         int(landmarks[24].y*h))
+                        ]
+                
+                knees = [
+                        (int(landmarks[26].x*w),
+                        int(landmarks[26].y*h)),
+                        
+                         (int(landmarks[25].x*w),
+                         int(landmarks[25].y*h))
+                         ]
+                
+                midHip = [
+                    int(((Hips[0][0] + Hips[1][0])/2)),
+                    int(((Hips[0][1] + Hips[1][1])/2))
+                        ]
+                angle = calculateAngle(knees[0],midHip,knees[1])
+                print(angle)
+                
+                if angle >= 60:
+                    stage = "up"
+                if angle < 20 and stage == "up":
+                    stage = "down"
+                    count += 1
+                    print(str(count)) 
+                
+                img = np.zeros((h, w, 3), dtype=np.uint8)
+                frame = cv2.circle(img, (midHip[0],midHip[1]), 1, (102,255,105), 10)
             except:
                 print('no jala')
                 
@@ -40,7 +88,7 @@ def yoga(cap):
                         break
             
 if __name__ == "__main__":
-    yoga(cap)
+    yoga(cap,1280,720)
         
 
                
