@@ -68,7 +68,7 @@ def armVideo(cap,w,h):
                     count += 1
                     print(str(count),"--------------------------------------")
                     
-                    if count == 10:
+                    if count == 5:
                         return count
 
             except:
