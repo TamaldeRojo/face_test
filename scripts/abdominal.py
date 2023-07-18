@@ -98,9 +98,8 @@ def abdominal(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) #draw landmarks
-            cv2.imshow("img",frame)
-            if cv2.waitKey(10) & 0xFF == ord('q'):
-                break
+            return frame
+            
 
 if __name__ == "__main__":
     abdominal(cap,1280,720)

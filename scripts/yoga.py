@@ -23,8 +23,6 @@ def calculateAngle(a,b,c):
 
 def yoga(cap,w,h):
     global stage,count
-    cap.set(3,w)
-    cap.set(4,h)
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while cap.isOpened():
             success,frame = cap.read()
@@ -83,9 +81,7 @@ def yoga(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) 
             
-            cv2.imshow("img",frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
+            return frame
             
 if __name__ == "__main__":
     yoga(cap,1280,720)

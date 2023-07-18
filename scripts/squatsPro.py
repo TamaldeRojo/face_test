@@ -72,13 +72,7 @@ def videoSquats(cap,w,h):
                         count += 1
                         up = False
                         down = False
-                        print(count)
-                        
-                    if count == 4:
-                        return count
-                    
-                    
-                    
+                        print(count)  
 
                 except:
                     print("no jala we")
@@ -88,9 +82,7 @@ def videoSquats(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) #draw landmarks
 
-                cv2.imshow("frame", frame) 
-                if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
+                return frame
                 
 def release_camera():
         cap.release()
@@ -98,4 +90,3 @@ def release_camera():
 
 if __name__ == "__main__":
     videoSquats(cap,1280,720)
-    release_camera()

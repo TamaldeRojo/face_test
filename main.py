@@ -3,7 +3,7 @@ from scripts.arm import armVideo
 from scripts.pushUp import pushUp
 from scripts.squatsPro import videoSquats
 from scripts.yoga import yoga
-import cv2,mediapipe as mp, numpy as np, math 
+import cv2,mediapipe as mp, numpy as np, math, pickle ,struct
 
 import socket
 import threading
@@ -11,16 +11,10 @@ import threading
 #Por paquete debo recibir:
 # Width,Height
 # Num Protocolo (1,..,5)
-
 #Debe Enviar:
 # Video 
-
-
-
-
 #host_name = socket.gethostname()
 #SERVER = socket.gethostbyname(host_name)
-#print(SERVER)
 
 
 
@@ -40,7 +34,7 @@ def programSetup(cap,i,w,h):
     elif i == 3:
         #cap = cv2.VideoCapture("arm.mp4")
         print("Brazo")
-        armVideo(cap,w,h)
+        frame = armVideo(cap,w,h)#test--------------------------->
     elif i == 4:
         #cap = cv2.VideoCapture("squats.mp4")
         print("Sentadillas")
@@ -51,6 +45,8 @@ def programSetup(cap,i,w,h):
         yoga(cap,w,h)
     else:
         return print("Saliendo...")
+    
+    return frame #test--------------------------->
      
 def getKey(conn) -> int:
     print("Looking for a key number")
@@ -65,7 +61,7 @@ def getKey(conn) -> int:
         else:
             print(f"Received invalid number: {number}")
             break
-    conn.close()
+    #conn.close()
     
 
 if __name__ == "__main__":
@@ -77,20 +73,27 @@ if __name__ == "__main__":
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
     server.listen(5)
+    
+    print("[+] Server is starting...")
     print(f'HOST IP: {SERVER}')
     print(f"LISTENING AT: {ADDR}")
     
-    print("[+] Server is starting...")
+    
     while True:
         client_socket,addr = server.accept()
         print(f'GOT CONNECTION FROM: {addr}')
         if client_socket:
             cap = cv2.VideoCapture(0)
-            
+                
             key = getKey(client_socket) #Protocolo ejercicio
             print(f"Tengo {key}")
             try:
-                programSetup(cap,key,1280,720)
+                while cap.isOpened():
+                    frame = programSetup(cap,key,640,480)
+                    cv2.imshow("server",frame)
+                    a = pickle.dumps(frame)
+                    message = struct.pack('Q',len(a))+a 
+                    #client_socket.sendall(message)
             except:
                 cap.release()
                 client_socket.close()
