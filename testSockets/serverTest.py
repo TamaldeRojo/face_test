@@ -1,7 +1,8 @@
-import socket,cv2,pickle,struct,mediapipe as mp, numpy as np
+import socket,cv2,pickle,struct,mediapipe as mp, numpy as np,time
 from math import degrees,acos
 import sys
 import os
+import fcntl
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..','scripts')))
 from arm import armVideo as arm
 from abdominal import abdominal
@@ -10,9 +11,19 @@ from squatsPro import videoSquats
 from yoga import yoga
 
  
-host_name = socket.gethostname()
-ip = socket.gethostbyname(host_name)
-#ip = "192.168.0.7"
+def get_ip_address(ifname):
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        ip_address = socket.inet_ntoa(fcntl.ioctl(
+            sock.fileno(),
+            0x8915,  # SIOCGIFADDR
+            struct.pack('256s', ifname[:15].encode('utf-8'))
+        )[20:24])
+    except IOError:
+        ip_address = None
+    return ip_address
+
+HOST = get_ip_address('wlan0')
 port = 5050
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'H264'))
@@ -45,6 +56,7 @@ def getKey(conn) -> int:
             break 
 
 def setup(cap,i,w,h):
+    time.sleep(5)
     if i == 1:
         #cap = cv2.VideoCapture("situps.mp4")
         print("Abdominales")
@@ -93,6 +105,6 @@ def runSetup(ss,cap):
             
 
 if __name__ == "__main__":
-    server_socket = connServer(ip,port)
+    server_socket = connServer(HOST,port)
     runSetup(server_socket,cap)
     pass

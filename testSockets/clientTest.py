@@ -29,7 +29,7 @@ def send_number(number: int):
     
 if __name__ == "__main__":
     client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    host_ip = '192.168.56.1'
+    host_ip = '192.168.0.7'
     port = 5050
     client_socket.connect((host_ip,port))
     
