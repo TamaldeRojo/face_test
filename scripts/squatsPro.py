@@ -47,21 +47,49 @@ def videoSquats(cap,w,h):
 
                 try:
                     landmarks = results.pose_landmarks.landmark
-                    hip = [int(landmarks[23].x*w),
-                           int(landmarks[23].y*h)]
+                    Hips = [
+                        (int(landmarks[23].x*w),
+                         int(landmarks[23].y*h)),
+                        
+                        (int(landmarks[24].x*w),
+                         int(landmarks[24].y*h))
+                        ]
                     
-                    knee = [int(landmarks[25].x*w),
-                           int(landmarks[25].y*h)]
+                    knees = [
+                        (int(landmarks[26].x*w),
+                        int(landmarks[26].y*h)),
+                        
+                         (int(landmarks[25].x*w),
+                         int(landmarks[25].y*h))
+                         ]
                     
-                    ankle = [int(landmarks[27].x*w),
-                           int(landmarks[27].y*h)]
+                    ankles = [
+                        (int(landmarks[27].x*w),
+                        int(landmarks[27].y*h)),
+                        
+                         (int(landmarks[28].x*w),
+                         int(landmarks[28].y*h))
+                         ]
+                    
+                    midHip = [
+                    int(((Hips[0][0] + Hips[1][0])/2)),
+                    int(((Hips[0][1] + Hips[1][1])/2))
+                        ]
+                    midKnee = [
+                    int(((knees[0][0] + knees[1][0])/2)),
+                    int(((knees[0][1] + knees[1][1])/2))
+                    ]
+                    midAnkles = [
+                        int(((ankles[0][0] + ankles[1][0])/2)),
+                        int(((ankles[0][1] + ankles[1][1])/2))
+                    ]
 
-                    angle = calculateAngle(hip,knee,ankle)
+                    angle = calculateAngle(midHip,midKnee,midAnkles)
 
                     image = np.zeros((h, w, 3), dtype=np.uint8)
-                    frame = cv2.circle(image, (hip[0],hip[1]), 1, (102,255,105), 10)
-                    frame = cv2.circle(image, (knee[0],knee[1]), 1, (102,255,105), 10)
-                    frame = cv2.circle(image, (ankle[0],ankle[1]), 1, (102,255,105), 10)
+                    frame = cv2.circle(image, (midHip[0],midHip[1]), 1, (102,255,105), 10)
+                    frame = cv2.circle(image, (midKnee[0],midKnee[1]), 1, (102,255,105), 10)
+                    frame = cv2.circle(image, (midAnkles[0],midAnkles[1]), 1, (102,255,105), 10)
                     #print(int(angle))
                     if angle >= 150:
                             up = True #parado

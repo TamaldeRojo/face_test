@@ -21,6 +21,7 @@ def calculateAngle(a,b,c):
 
 def armVideo(cap,w,h):
     global count,stage
+
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as Pose:
         while cap.isOpened():
             success,frame = cap.read()

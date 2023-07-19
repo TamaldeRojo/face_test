@@ -1,6 +1,5 @@
 import socket,cv2,pickle,struct 
 
-
 def clientConn():
     data = b""
     payload_size = struct.calcsize('Q')
@@ -19,9 +18,7 @@ def clientConn():
         data = data[msg_size:]
         frame = pickle.loads(frame_data)
         cv2.imshow("Received", frame)
-        
-        
-
+    
         if cv2.waitKey(1) & 0xFF == ord('q'):
             client_socket.close()
             break
@@ -39,4 +36,3 @@ if __name__ == "__main__":
     number = int(input("Enter a number from 1 to 5: "))
     send_number(number)
     clientConn()
-    #exitNum = int(input("Escribe 6 para salir"))

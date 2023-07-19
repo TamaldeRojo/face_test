@@ -9,11 +9,13 @@ from pushUp import pushUp
 from squatsPro import videoSquats
 from yoga import yoga
 
-#host_ip = "192.168.56.1" 
+ 
 host_name = socket.gethostname()
 ip = socket.gethostbyname(host_name)
+#ip = "192.168.0.7"
 port = 5050
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'H264'))
 w = 640
 h = 480
 
@@ -53,7 +55,7 @@ def setup(cap,i,w,h):
         frame = pushUp(cap,w,h)
     elif i == 3:
         #cap = cv2.VideoCapture("arm.mp4")
-        print("Brazo")
+        #print("Brazo")
         frame = arm(cap,w,h)#test--------------------------->
     elif i == 4:
         #cap = cv2.VideoCapture("squats.mp4")
