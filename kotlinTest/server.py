@@ -1,35 +1,41 @@
-import socket
+import socket,cv2
+import time
 
-# Set the host and port for the server
+cap = cv2.VideoCapture(0)
 host_name = socket.gethostname()
-HOST = socket.gethostbyname(host_name)
+#HOST = socket.gethostbyname(host_name)
+HOST = "192.168.0.7"
 PORT = 5050
+correo = "defaultServer@gmail.com"
+correos = ['list@gmail.com','listtest@gmail.com']
 
-# Create a socket object
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def save_emails_to_file():
+    with open("emails.txt", "w") as file:
+        for email in correos:
+            file.write(email + "\n")
+            
+if __name__ == "__main__":
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(5)
+    print(f"Server is listening on {HOST}:{PORT}")
 
-# Bind the socket to a specific address and port
-server_socket.bind((HOST, PORT))
+    
+    while True:
+        client_socket, addr = server_socket.accept()
+        print(f"Connected to client: {addr}" )
+        data = client_socket.recv(1024).decode('utf-8')
+        if not data:
+            print("No data")
+            break
+        elif "@" in data:
+            print(f"Correo nuevo: {data}")
+            correos.append(data)
+            save_emails_to_file()
+            client_socket.close()
+            continue
+        
 
-# Listen for incoming connections
-server_socket.listen(5)
-
-print(f"Server is listening on {HOST}:{PORT}")
-
-# Accept a client connection
-
-
-# Receive data from the client and send a response
-while True:
-    client_socket, addr = server_socket.accept()
-    print(f"Connected to client: {addr}" )
-    data = client_socket.recv(1024).decode()
-    if not data:
-        break
-    print(f"Received from client: {data}")
-    response = "Hello from server!"
-    #client_socket.send(response.encode())
-
-# Close the connection
-client_socket.close()
-server_socket.close()
+    # Close the connection
+    client_socket.close()
+    server_socket.close()

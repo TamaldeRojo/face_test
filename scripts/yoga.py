@@ -2,6 +2,7 @@ import mediapipe as mp
 import cv2 
 from math import cos,degrees
 import numpy as np
+import imutils
 
 cap = cv2.VideoCapture("legs.mp4")
 
@@ -24,11 +25,15 @@ def calculateAngle(a,b,c):
 def yoga(cap,w,h):
     global stage,count
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        frame_count = 0
+        frames_to_skip = 5
         while cap.isOpened():
+            frame_count += 1
             success,frame = cap.read()
             if not success:
                 break
-            
+            if frame_count % frames_to_skip != 0:
+                    continue
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frame.flags.writeable = False
                 
@@ -80,6 +85,7 @@ def yoga(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) 
+            frame = imutils.resize(frame, width=320)
             
             return frame
             

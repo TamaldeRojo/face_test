@@ -1,4 +1,4 @@
-import cv2,mediapipe as mp,numpy as np, math
+import cv2,mediapipe as mp,numpy as np, math, imutils
 
 mp_pose = mp.solutions.pose
 mp_drawing = mp.solutions.drawing_utils
@@ -23,12 +23,16 @@ def armVideo(cap,w,h):
     global count,stage
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as Pose:
+        frame_count = 0
+        frames_to_skip = 5
         while cap.isOpened():
+            frame_count += 1
             success,frame = cap.read()
             if not success:
                 print('Not success CameraVideo')
                 break
-
+            if frame_count % frames_to_skip != 0:
+                    continue
             frame = cv2.cvtColor(frame,cv2.COLOR_BGR2RGB)
             frame.flags.writeable = False 
 
@@ -78,6 +82,7 @@ def armVideo(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) #draw landmarks 
+            frame = imutils.resize(frame, width=320)
             return frame
             
 

@@ -1,4 +1,5 @@
 from math import acos,degrees
+import imutils
 import cv2
 import mediapipe as mp 
 import numpy as np
@@ -28,14 +29,17 @@ def videoSquats(cap,w,h):
         global down
         global up
         with mp_pose.Pose(min_detection_confidence=0.5,min_tracking_confidence=0.5) as pose:
+            frame_count = 0
+            frames_to_skip = 5
             
             while cap.isOpened():
-                
+                frame_count += 1
                 success, frame = cap.read()
                 if not success:
                     print('Not success CameraVideo')
                     break
-                
+                if frame_count % frames_to_skip != 0:
+                    continue
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame.flags.writeable = False
                 
@@ -83,7 +87,7 @@ def videoSquats(cap,w,h):
                         int(((ankles[0][0] + ankles[1][0])/2)),
                         int(((ankles[0][1] + ankles[1][1])/2))
                     ]
-
+                    
                     angle = calculateAngle(midHip,midKnee,midAnkles)
 
                     image = np.zeros((h, w, 3), dtype=np.uint8)
@@ -95,7 +99,6 @@ def videoSquats(cap,w,h):
                             up = True #parado
                     if up == True and down == False and angle <= 149 and angle>=51:
                             down = True #flexionado
-                        
                     if up == True and down == True and angle >= 50:
                         count += 1
                         up = False
@@ -109,8 +112,8 @@ def videoSquats(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) #draw landmarks
-
-                return frame
+                frame = imutils.resize(frame, width=320)
+                return frame,count
                 
 def release_camera():
         cap.release()

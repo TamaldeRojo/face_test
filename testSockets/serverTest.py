@@ -10,12 +10,10 @@ from squatsPro import videoSquats
 from yoga import yoga
 
  
-host_name = socket.gethostname()
-ip = socket.gethostbyname(host_name)
-#ip = "192.168.0.7"
+
+ip = "192.168.0.7"
 port = 5050
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'H264'))
 w = 640
 h = 480
 
