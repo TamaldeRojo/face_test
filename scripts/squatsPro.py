@@ -106,13 +106,19 @@ def videoSquats(cap,w,h):
                         print(count)  
 
                 except:
+                    angle = 180
                     print("no jala we")
-                
-                mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
-                                      mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
-                                      mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
-                                      ) #draw landmarks
-                frame = imutils.resize(frame, width=320)
+                if angle <= 60:
+                    mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
+                                      mp_drawing.DrawingSpec(color=(124,252,0),thickness=2,circle_radius=2),
+                                      mp_drawing.DrawingSpec(color=(124,252,0),thickness=2,circle_radius=2)
+                                      )
+                else:
+                    mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
+                                        mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
+                                        mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
+                                        ) #draw landmarks
+                #frame = imutils.resize(frame, width=320)
                 return frame,count
                 
 def release_camera():

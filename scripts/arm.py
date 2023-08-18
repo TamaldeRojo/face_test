@@ -64,25 +64,32 @@ def armVideo(cap,w,h):
                
                 if angle >= 150:
                     stage = "down"
-                    #print('down')
+                    
                 if angle < 30 and stage == "down":
                     #print("up")
                     stage ="up"
                     count += 1
                     print(str(count),"--------------------------------------")
                     
-                    if count == 10:
-                        return count
-
             except:
                 print(" No te ves we ")
                 pass
-
-            mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
-                                      mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
-                                      mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
-                                      ) #draw landmarks 
-            frame = imutils.resize(frame, width=320)
+            if stage == "down":
+                mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
+                                        mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
+                                        mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
+                                        )
+            elif stage == "up":
+                mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
+                                      mp_drawing.DrawingSpec(color=(124,252,0),thickness=2,circle_radius=2),
+                                      mp_drawing.DrawingSpec(color=(124,252,0),thickness=2,circle_radius=2)
+                                      )
+            else:
+                mp_drawing.draw_landmarks(frame,results.pose_landmarks,mp_pose.POSE_CONNECTIONS,
+                                        mp_drawing.DrawingSpec(color=(245,117,66),thickness=2,circle_radius=2),
+                                        mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
+                                        ) #draw landmarks 
+            #frame = imutils.resize(frame, width=320)   #AQUI MI AMOR
             return frame, count
             
 

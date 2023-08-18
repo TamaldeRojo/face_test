@@ -11,15 +11,13 @@ import scripts.yoga as yg
 from kotlinTest.server import correos 
 
 app = Flask(__name__)
-h = 480
-w = 640
+h = 720
+w = 1280
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 30)
 URL = 'https://mainapi-istq.onrender.com/exercises'
 
-email = 'None@gmail.com'
+email = 'StandUser@gmail.com'
 
 def video(id):
     while True:
@@ -72,10 +70,5 @@ def video(id):
 def index(id):
     return Response(video(id),mimetype="multipart/x-mixed-replace; boundary=frame")
 
-@app.route('/release')
-def release_cap():
-    cap.release()
-    return "Camera Released"
-    
 if __name__ == "__main__":
     app.run(host="192.168.0.3",debug=True)
