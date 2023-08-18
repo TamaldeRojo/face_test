@@ -104,7 +104,7 @@ def abdominal(cap,w,h):
                                       ) #draw landmarks
             
             frame = imutils.resize(frame, width=320)
-            return frame
+            return frame, count
             
 
 if __name__ == "__main__":

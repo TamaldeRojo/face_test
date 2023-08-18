@@ -87,7 +87,7 @@ def yoga(cap,w,h):
                                       ) 
             frame = imutils.resize(frame, width=320)
             
-            return frame
+            return frame, count
             
 if __name__ == "__main__":
     yoga(cap,1280,720)

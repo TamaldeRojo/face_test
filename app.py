@@ -17,7 +17,7 @@ cap = cv2.VideoCapture("squats.mp4")
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 cap.set(cv2.CAP_PROP_FPS, 30)
-URL = 'https://fastapi-movefit.onrender.com/exercises'
+URL = 'https://mainapi-istq.onrender.com/exercises'
 
 email = 'None@gmail.com'
 
@@ -41,30 +41,35 @@ def video(id):
                 obj = {'email':emails[-1],'typeOf':str(id),'count':str(count)}
                 print("a")
                 requests.post(URL,json=obj)
+                count = 0
             theVideo = cv2.resize(theVideo,(0,0),fx=1,fy=1)
         if id == 2:
-            theVideo = ab.abdominal(cap,w,h)
+            theVideo,count = ab.abdominal(cap,w,h)
             if count == 5:
                 obj = {'email':emails[-1],'typeOf':str(id),'count':str(count)}
                 requests.post(URL,json=obj)
+                count = 0
             theVideo = cv2.resize(theVideo,(0,0),fx=1,fy=1)
         if id == 3:
-            theVideo = arm.armVideo(cap,w,h)
+            theVideo,count = arm.armVideo(cap,w,h)
             if count == 5:
                 obj = {'email':emails[-1],'typeOf':str(id),'count':str(count)}
                 requests.post(URL,json=obj)
+                count = 0
             theVideo = cv2.resize(theVideo,(0,0),fx=1,fy=1)
         if id == 4:
-            theVideo = pu.pushUp(cap,w,h)
+            theVideo, count = pu.pushUp(cap,w,h)
             if count == 5:
                 obj = {'email':emails[-1],'typeOf':str(id),'count':str(count)}
                 requests.post(URL,json=obj)
+                count = 0
             theVideo = cv2.resize(theVideo,(0,0),fx=1,fy=1)
         if id == 5:
-            theVideo = yg.yoga(cap,w,h)
+            theVideo, count = yg.yoga(cap,w,h)
             if count == 5:
                 obj = {'email':emails[-1],'typeOf':str(id),'count':str(count)}
                 requests.post(URL,json=obj)
+                count = 0
             theVideo = cv2.resize(theVideo,(0,0),fx=1,fy=1)
             
         encodedImg = cv2.imencode(".jpg",theVideo)[1].tobytes()

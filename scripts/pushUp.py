@@ -72,7 +72,7 @@ def pushUp(cap,w,h):
                                       mp_drawing.DrawingSpec(color=(245,66,230),thickness=2,circle_radius=2)
                                       ) #draw landmarks
             frame = imutils.resize(frame, width=320)
-            return frame
+            return frame, count
 
 if __name__ == '__main__':
     pushUp(cap,1280,720)
